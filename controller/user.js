@@ -1,9 +1,9 @@
-const UserModel = require("../models/user");
+const UserModel = require('../models/user')
 // const MobilePhoneModel = require("../models/mobilePhone");
 // const mesModel = require("../models/message");
 
 // const fs = require("fs");
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken')
 // const tools = require("../utils/tools");
 // const bcrypt = require("bcryptjs"); // 用于密码哈希的加密算法
 // const { log } = require("debug");
@@ -11,8 +11,8 @@ const jwt = require("jsonwebtoken");
 
 const register = async (ctx) => {
   // const { userName, password, mobilePhone, smsCode } = ctx.request.body;
-  const {userName, password} = ctx.request.body
-  console.log(userName,password)
+  const { userName, password } = ctx.request.body
+  console.log(userName, password)
   // if (!userName || !password || !mobilePhone || !smsCode)
   //   return (ctx.body = {
   //     code: 5020,
@@ -33,40 +33,40 @@ const register = async (ctx) => {
       $or: [
         {
           userName,
-        }
+        },
         // {
         //   mobilePhone,
         // },
       ],
-    });
+    })
     if (userDoc !== null)
       return (ctx.body = {
         code: 0,
-        msg: "用户名已存在",
-      });
+        msg: '用户名已存在',
+      })
     // 注册账号
     const userEntity = new UserModel({
       userName,
       password,
       // mobilePhone,
-    });
-    await userEntity.save();
-    const token = jwt.sign({ _id: userEntity._id }, "LightHouse", {
+    })
+    await userEntity.save()
+    const token = jwt.sign({ _id: userEntity._id }, 'LightHouse', {
       expiresIn: 60 * 60 * 24 * 7,
-    });
+    })
     ctx.body = {
       code: 200,
       user: userEntity,
-      token:token,
-      msg: "注册成功",
-    };
+      token: token,
+      msg: '注册成功',
+    }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
 
 const login = async (ctx) => {
-  const { userName, password } = ctx.request.body;
+  const { userName, password } = ctx.request.body
   // if (!userName || !password || !verifyCode)
   //   return (ctx.body = {
   //     code: 5020,
@@ -92,20 +92,20 @@ const login = async (ctx) => {
         //   mobilePhone: userName,
         // },
       ],
-    });
-    if(!userDoc) return (ctx.body={code:-1,msg:"用户不存在"})
+    })
+    if (!userDoc) return (ctx.body = { code: -1, msg: '用户不存在' })
     // 登录账号
     // const result = await userDoc.comparePassword(password, userDoc.password); // 进行密码比对是否一致
-    const result = await userDoc.password === password;
-    if (!result) return (ctx.body = { code: -2, msg: "用户名或者密码错误" });
-    const token = jwt.sign({ _id: userDoc._id }, "LightHouse", {
+    const result = (await userDoc.password) === password
+    if (!result) return (ctx.body = { code: -2, msg: '用户名或者密码错误' })
+    const token = jwt.sign({ _id: userDoc._id }, 'LightHouse', {
       expiresIn: 60 * 60 * 24 * 7,
-    });
+    })
     ctx.body = {
       code: 200,
-      msg: "登录成功",
+      msg: '登录成功',
       token,
-      user: userDoc
+      user: userDoc,
       // data: {
       //   userName: userDoc.userName,
       //   mobilePhone: userDoc.mobilePhone,
@@ -121,15 +121,20 @@ const login = async (ctx) => {
       //   friendsGroup: userDoc.friendsGroup,
       //   id: userDoc._id,
       // },
-    };
+    }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
+
+const save = async (ctx) => {
+  console.log(ctx.request.body)
+}
 
 module.exports = {
   register,
   login,
+  save,
   // sendSMSCode,
   // updateUserInfo,
   // getUserInfo,
@@ -145,4 +150,4 @@ module.exports = {
   // updateUserConversations,
   // deleteDialog,
   // userCheckIsMyFriend,
-};
+}
