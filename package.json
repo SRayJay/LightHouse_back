@@ -17,5 +17,8 @@
     "koa-session": "^6.2.0",
     "koa-static": "^5.0.0",
     "mongoose": "^6.0.2"
+  },
+  "devDependencies": {
+    "log4js": "^6.3.0"
   }
 }

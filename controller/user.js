@@ -1,4 +1,4 @@
-const UserModel = require('../models/user')
+const UserModel = require('../models/userSchema')
 // const MobilePhoneModel = require("../models/mobilePhone");
 // const mesModel = require("../models/message");
 
@@ -131,10 +131,24 @@ const save = async (ctx) => {
   console.log(ctx.request.body)
 }
 
+const checkUserList = async(ctx)=>{
+  const { key } = ctx.request.body
+  try {
+    let userDoc = UserModel.find({name:'webber'},()=>{
+
+    })
+    console.log('111')
+    console.log(userDoc)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 module.exports = {
   register,
   login,
   save,
+  checkUserList
   // sendSMSCode,
   // updateUserInfo,
   // getUserInfo,

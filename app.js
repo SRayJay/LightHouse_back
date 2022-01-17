@@ -6,8 +6,12 @@ const cors = require('koa-cors');
 const session = require("koa-session");
 const Router = require('koa-router')
 // const bodyparser = require("koa-bodyparser");
+
+// 路由
 const index = require("./routes/index");
 const user = require("./routes/user");
+const admin = require('./routes/admin')
+
 const koaBody = require('koa-body')
 const path = require('path')
 // const friendly = require("./routes/friendly");
@@ -79,6 +83,7 @@ app.use(async (ctx, next) => {
 // routes
 router.use("", index.routes());
 router.use("/user", user.routes()); // 用户相关
+router.use("/admin",admin.routes()); // 管理员相关
 // router.use("/api/friendly", friendly.routes());
 // router.use("/api/upload", upload.routes());
 // router.use("/api/group", group.routes());
