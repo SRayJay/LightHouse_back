@@ -5,22 +5,7 @@
 // router.prefix('/admin')
 
 // router.post('/login', async(ctx)=>{
-//     console.log(ctx.request.body.admin)
-//     const {adminName,adminPwd} = ctx.request.body.admin;
-//     try {
-//         const res = await Admin.findOne({
-//             adminName,
-//             adminPwd
-//         })
-//         console.log(res)
-//         // if(res){
-//         //     util.success(res)
-//         // }else{
-//         //     util.fail('账号或密码不正确')
-//         // }
-//     } catch (error) {
-//         // util.fail(error.msg)
-//     }
+
     
 // })
 const Router = require('koa-router')

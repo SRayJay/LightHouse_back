@@ -11,5 +11,5 @@ router.post('/login', api.login)
 
 router.post('/save', api.save)
 
-router.get('/checkUserList',api.checkUserList)
+router.get('/checkUserList', api.checkUserList)
 module.exports = router

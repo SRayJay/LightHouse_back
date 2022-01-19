@@ -132,16 +132,30 @@ const save = async (ctx) => {
 }
 
 const checkUserList = async(ctx)=>{
-  const { key } = ctx.request.body
+  const  key  = ctx.query[0]
   try {
-    let userDoc = UserModel.find({name:'webber'},()=>{
-
-    })
-    console.log('111')
-    console.log(userDoc)
+    let userlist = []
+    let res = await getUserList(key)
+    ctx.body = {
+      code:200,
+      msg:'查询成功',
+      data:res
+    }
   } catch (error) {
     console.log(error)
   }
+}
+
+// 查询用户操作
+function getUserList(key){
+  return new Promise((resolve,reject)=>{
+    console.log('key:',key)
+    const reg = new RegExp(key,'i')
+    UserModel.find({userName:{$regex:key}}).exec((err,users)=>{
+      console.log(users)
+      resolve(users)
+    })
+  })
 }
 
 module.exports = {

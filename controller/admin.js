@@ -9,9 +9,6 @@ const login = async (ctx) => {
           {
             adminName,
           },
-          // {
-          //   mobilePhone: userName,
-          // },
         ],
       })
       if (!adminDoc) return (ctx.body = { code: -1, msg: '用户不存在' })
@@ -20,7 +17,7 @@ const login = async (ctx) => {
         code: 200,
         msg: '登录成功',
         // token,
-        admin: adminDoc,
+        data: adminDoc,
        
       }
     } catch (error) {
