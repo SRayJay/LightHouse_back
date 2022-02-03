@@ -88,9 +88,6 @@ const login = async (ctx) => {
         {
           userName,
         },
-        // {
-        //   mobilePhone: userName,
-        // },
       ],
     })
     if (!userDoc) return (ctx.body = { code: -1, msg: '用户不存在' })
