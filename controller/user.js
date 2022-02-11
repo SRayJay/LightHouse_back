@@ -148,10 +148,18 @@ function getUserList(key){
   return new Promise((resolve,reject)=>{
     console.log('key:',key)
     const reg = new RegExp(key,'i')
-    UserModel.find({userName:{$regex:key}}).exec((err,users)=>{
-      console.log(users)
-      resolve(users)
-    })
+    if(key){
+      UserModel.find({userName:{$regex:key}}).exec((err,users)=>{
+        console.log(users)
+        resolve(users)
+      })
+    }else{
+      UserModel.find({}).exec((err,users)=>{
+        console.log(users)
+        resolve(users)
+      })
+    }
+    
   })
 }
 
