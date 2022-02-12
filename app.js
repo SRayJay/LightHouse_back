@@ -4,6 +4,7 @@ const onerror = require("koa-onerror");
 const logger = require("koa-logger");
 const cors = require('koa-cors');
 const session = require("koa-session");
+// const log4js = require('log4js');
 const Router = require('koa-router')
 // const bodyparser = require("koa-bodyparser");
 
@@ -12,6 +13,8 @@ const index = require("./routes/index");
 const user = require("./routes/user");
 const admin = require('./routes/admin')
 const book = require('./routes/book')
+const author = require('./routes/author')
+const upload = require('./routes/upload')
 
 const koaBody = require('koa-body')
 const path = require('path')
@@ -47,13 +50,7 @@ app.use(require("koa-static")(__dirname + "/public"));
 app.use(koaBody({
   // 支持文件格式
   enableTypes: ['json', 'form', 'text'],
-  multipart: true,
-  formidable: {
-    // 上传目录
-    uploadDir: path.join(__dirname, 'public/uploads'),
-    // 保留文件扩展名
-    keepExtensions: true,
-  }
+  // multipart: true,
 }));
 app.use(
   cors({
@@ -86,6 +83,8 @@ router.use("", index.routes());
 router.use("/user", user.routes()); // 用户相关
 router.use("/admin",admin.routes()); // 管理员相关
 router.use("/book",book.routes()); // 书籍相关
+router.use("/author",author.routes()); // 作者相关
+router.use('/upload',upload.routes()); // 上传相关
 // router.use("/api/friendly", friendly.routes());
 // router.use("/api/upload", upload.routes());
 // router.use("/api/group", group.routes());
