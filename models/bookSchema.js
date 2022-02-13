@@ -3,9 +3,10 @@ const Schema = mongoose.Schema;
 
 const bookSchema = new Schema({
 
-    name:{type:String,},
-    authorId:{type:Schema.Types.ObjectId},
-    publisherId:{type:Schema.Types.ObjectId},
+    name:String,
+    authorId:String,
+    publisher:String,
+    producer:String,
     ISBN:String,
     intro:String,
     have_read:{type:Array,default:[]},
@@ -18,7 +19,7 @@ const bookSchema = new Schema({
     publishTime:Date,
     // book_cate
     // book_label:
-    photoUrl:String,
+    cover:{String,default:'/img/default_book.png'},
     book_isHot:{type:Boolean,default:false}
 
 })

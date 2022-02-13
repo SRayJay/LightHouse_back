@@ -15,6 +15,7 @@ const admin = require('./routes/admin')
 const book = require('./routes/book')
 const author = require('./routes/author')
 const upload = require('./routes/upload')
+const other = require('./routes/other')
 
 const koaBody = require('koa-body')
 const path = require('path')
@@ -85,6 +86,7 @@ router.use("/admin",admin.routes()); // 管理员相关
 router.use("/book",book.routes()); // 书籍相关
 router.use("/author",author.routes()); // 作者相关
 router.use('/upload',upload.routes()); // 上传相关
+router.use('/other',other.routes()); // 其他api
 // router.use("/api/friendly", friendly.routes());
 // router.use("/api/upload", upload.routes());
 // router.use("/api/group", group.routes());
