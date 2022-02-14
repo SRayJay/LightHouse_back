@@ -1,5 +1,7 @@
 const ProducerModel = require('../models/producerSchema')
 const PublisherModel = require('../models/publisherSchema')
+const SeriesModel = require('../models/seriesSchema')
+
 
 const getPublishers = async(ctx)=>{
     try {
@@ -99,13 +101,37 @@ const getProducers = async(ctx)=>{
         }
     }
 }
+
+const addSeries = async(ctx)=>{
+    const {name,count,pubId} = ctx.request.body;
+    try {
+        let s = new SeriesModel({
+            name,count,publisher:pubId
+        })
+        await s.save()
+        console.log(s)
+        await PublisherModel.findOneAndUpdate({_id:pubId},{$push:{series:s._id}}).exec()
+        ctx.body={
+            code:200,
+            msg:'添加成功',
+            data:s
+        }
+    } catch (error) {
+        console.log(error)
+        ctx.body = {
+            code:40001,
+            msg:'接口出错',
+            data:{}
+        }
+    }
+}
 /**
  * @param 1:Publisher,2:Producer
  */
 function getData(param){
     return new Promise((resolve,reject)=>{
         if(param==1){
-            PublisherModel.find({}).exec((err,publishers)=>{
+            PublisherModel.find({}).populate('series','name').exec((err,publishers)=>{
                 resolve(publishers)
             })
         }else if(param ==2){
@@ -121,5 +147,6 @@ module.exports={
     getPublishers,
     getProducers,
     addPublisher,
-    addProducer
+    addProducer,
+    addSeries
 }

@@ -7,6 +7,7 @@ const authorSchema = new Schema({
     country:{type:String},
     intro:String,
     nobel:{type:Number,default:0},
+    books:[{type:Schema.Types.ObjectId,ref:'book'}],
     photo:{type:String,default:''},//默认作者图片路径
 
 })

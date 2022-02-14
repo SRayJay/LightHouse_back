@@ -5,7 +5,7 @@ const producerSchema = new Schema({
     name:String,
     intro:String,
     logo:String,
-    books:{type:Array,default:[]}
+    books:[{type:Schema.Types.ObjectId,ref:'book'}]
 })
 
 module.exports = mongoose.model('producer',producerSchema)

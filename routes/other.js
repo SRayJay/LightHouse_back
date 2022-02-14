@@ -15,4 +15,9 @@ router.get('/getProducers',api.getProducers)
 router.post('/addProducer',api.addProducer)
 
 
+/**
+ * 丛书相关api
+ */
+router.post('/addSeries',api.addSeries)
+
 module.exports = router

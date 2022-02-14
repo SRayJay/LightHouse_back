@@ -9,6 +9,8 @@ const bookSchema = new Schema({
     producer:String,
     ISBN:String,
     intro:String,
+    translator:String,
+    series:String,
     have_read:{type:Array,default:[]},
     reading:{type:Array,default:[]},
     want_read:{type:Array,default:[]},
@@ -16,10 +18,10 @@ const bookSchema = new Schema({
     excerpts:{type:Array,default:[]},
     rate:{type:Number,default:0},
     comments:{type:Array,default:[]},
-    publishTime:Date,
+    publishTime:String,
     // book_cate
     // book_label:
-    cover:{String,default:'/img/default_book.png'},
+    cover:{type:String,default:'/img/default_book.png'},
     book_isHot:{type:Boolean,default:false}
 
 })
