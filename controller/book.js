@@ -40,9 +40,17 @@ const addBook = async(ctx)=>{
             msg:'已存在该书名',
             data:{}
         }
+        let authorDoc = await AuthorModel.findOne({name:author}).exec();
+        console.log(authorDoc)
+        if(!authorDoc) return ctx.body={
+            code:40001,
+            msg:'不存在该作者',
+            data:{}
+        }
+
         const book = new BookModel({
             name,
-            author,
+            author:authorDoc._id,
             intro,ISBN,cover,publisher,producer,publishTime,translator,series
         })
         await book.save()
@@ -99,7 +107,8 @@ function getBooks(param,key){
                 })
             }
         }else if(param==1){
-            BookModel.find({book_isHot:'true'}).exec((err,books)=>{
+            BookModel.find({book_isHot:'true'}).populate('author','name country').exec((err,books)=>{
+                // BookModel.find({book_isHot:'true'}).exec((err,books)=>{
                 console.log(books)
                 resolve(books)
             })
