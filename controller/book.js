@@ -18,6 +18,25 @@ const hotBooks = async(ctx)=>{
         console.log(error)
     }
 }
+const getBook = async(ctx) =>{
+    console.log(ctx.query[0])
+    try {
+        const id = ctx.query[0]
+        let book = await getBooks(2,id)
+        ctx.body={
+            code:200,
+            msg:'查询成功',
+            data:book
+        }
+    } catch (error) {
+        console.log(error)
+        ctx.body={
+            code:40001,
+            msg:'查询出错',
+            data:{}
+        }
+    }
+}
 const checkBookList = async(ctx)=>{
     try{
         let books = await getBooks(0)
@@ -98,10 +117,12 @@ function getBooks(param,key){
     return new Promise((resolve,reject)=>{
         if(param==0){
             if(key){
+                // 有关键词 搜索相关书籍
                 BookModel.find({}).exec((err,books)=>{
                     resolve(books)
                 })
             }else{
+                // 无参数->得到所有书籍
                 BookModel.find({}).exec((err,books)=>{
                     resolve(books)
                 })
@@ -112,6 +133,11 @@ function getBooks(param,key){
                 console.log(books)
                 resolve(books)
             })
+        }else if(param==2){
+            // 根据id查询指定book
+            BookModel.findById(key).populate('author','name country intro').exec((err,book)=>{
+                resolve(book)
+            })
         }
         
     })
@@ -121,5 +147,6 @@ module.exports = {
     hotBooks,
     checkBookList,
     addBook,
-    deleteBook
+    deleteBook,
+    getBook
 }

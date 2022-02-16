@@ -19,6 +19,7 @@ const bookSchema = new Schema({
     rate:{type:Number,default:0},
     comments:[{type:Schema.Types.ObjectId,}],
     publishTime:String,
+    pages:Number,
     // book_cate
     // book_label:
     cover:{type:String,default:'/img/default_book.png'},
