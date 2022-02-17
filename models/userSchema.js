@@ -18,6 +18,7 @@ const userSchema = new Schema({
   // conversationsList: Array, // 会话列表 * name 会话名称 * photo 会话头像 * id 会话id * type   会话类型 group/ frend/me
   // emoji: Array, // 表情包
   age: { type: Number, default: 0 },
+  background:{type:String,default:'/img/default_background.jpg'}, // 默认背景
   focus: {
     type: Array,
     default: []

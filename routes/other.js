@@ -20,4 +20,7 @@ router.post('/addProducer',api.addProducer)
  */
 router.post('/addSeries',api.addSeries)
 
+
+router.get('/search',api.search)
+
 module.exports = router

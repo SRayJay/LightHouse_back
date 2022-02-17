@@ -1,8 +1,33 @@
 const ProducerModel = require('../models/producerSchema')
 const PublisherModel = require('../models/publisherSchema')
 const SeriesModel = require('../models/seriesSchema')
-
-
+const {getAuthorList} = require('../controller/author')
+const {getUserList} = require('../controller/user')
+const {getBooks} = require('../controller/book')
+const search = async(ctx)=>{
+    try {
+        let res = []
+        let key = ctx.query[0]
+        let books = await getBooks(0,key)
+        let authors = await getAuthorList(key)
+        let users = await getUserList(key)
+        res.push(books)
+        res.push(authors)
+        res.push(users)
+        ctx.body={
+            code:200,
+            msg:'搜索成功',
+            data:res
+        }
+    } catch (error) {
+        console.log(error)
+        ctx.body = {
+            code:40001,
+            msg:'接口出错',
+            data:{}
+        }
+    }
+}
 const getPublishers = async(ctx)=>{
     try {
         let res = await getData(1)
@@ -148,5 +173,6 @@ module.exports={
     getProducers,
     addPublisher,
     addProducer,
-    addSeries
+    addSeries,
+    search
 }

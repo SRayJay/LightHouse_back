@@ -131,7 +131,6 @@ const save = async (ctx) => {
 const checkUserList = async(ctx)=>{
   const  key  = ctx.query[0]
   try {
-    let userlist = []
     let res = await getUserList(key)
     ctx.body = {
       code:200,
@@ -147,7 +146,7 @@ const checkUserList = async(ctx)=>{
 function getUserList(key){
   return new Promise((resolve,reject)=>{
     console.log('key:',key)
-    const reg = new RegExp(key,'i')
+    // const reg = new RegExp(key,'i')
     if(key){
       UserModel.find({userName:{$regex:key}}).exec((err,users)=>{
         console.log(users)
@@ -167,7 +166,8 @@ module.exports = {
   register,
   login,
   save,
-  checkUserList
+  checkUserList,
+  getUserList
   // sendSMSCode,
   // updateUserInfo,
   // getUserInfo,

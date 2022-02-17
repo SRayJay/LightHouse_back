@@ -37,9 +37,10 @@ const getBook = async(ctx) =>{
         }
     }
 }
+
 const checkBookList = async(ctx)=>{
     try{
-        let books = await getBooks(0)
+        let books = await getBooks(3)
         ctx.body = {
             code:200,
             msg:'查询成功',
@@ -118,16 +119,12 @@ function getBooks(param,key){
         if(param==0){
             if(key){
                 // 有关键词 搜索相关书籍
-                BookModel.find({}).exec((err,books)=>{
-                    resolve(books)
-                })
-            }else{
-                // 无参数->得到所有书籍
-                BookModel.find({}).exec((err,books)=>{
+                BookModel.find({name:{$regex:key}}).populate('author','name country intro').exec((err,books)=>{
                     resolve(books)
                 })
             }
         }else if(param==1){
+            // 热门书籍
             BookModel.find({book_isHot:'true'}).populate('author','name country').exec((err,books)=>{
                 // BookModel.find({book_isHot:'true'}).exec((err,books)=>{
                 console.log(books)
@@ -137,6 +134,10 @@ function getBooks(param,key){
             // 根据id查询指定book
             BookModel.findById(key).populate('author','name country intro').exec((err,book)=>{
                 resolve(book)
+            })
+        }else if(param==3){
+            BookModel.find({}).exec((err,books)=>{
+                resolve(books)
             })
         }
         
@@ -148,5 +149,6 @@ module.exports = {
     checkBookList,
     addBook,
     deleteBook,
-    getBook
+    getBook,
+    getBooks
 }

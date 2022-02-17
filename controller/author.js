@@ -47,7 +47,8 @@ const deleteAuthor = async(ctx)=>{
 }
 const getAuthors = async(ctx)=>{
     try {
-        let res = await getAuthorList()
+        const key = ctx.query[0]
+        let res = await getAuthorList(key)
         ctx.body= {
             code:200,
             msg:'获取作者列表成功',
@@ -55,19 +56,57 @@ const getAuthors = async(ctx)=>{
         }
     } catch (error) {
         console.log(error)
+        ctx.body = {
+            code:40001,
+            msg:'接口出错',
+            data:{}
+        }
     }
 }
-
-function getAuthorList(){
+const getAuthorById = async(ctx)=>{
+    try {
+        let author = await getAuthor(ctx.query[0])
+        ctx.body={
+            code:200,
+            msg:'查询成功',
+            data:author
+        }
+    } catch (error) {
+        console.log(error)
+        ctx.body = {
+            code:40001,
+            msg:'接口出错',
+            data:{}
+        }
+    }
+}
+function getAuthor(id){
     return new Promise((resolve,reject)=>{
-        AuthorModel.find({}).exec((err,authors)=>{
-            console.log(authors),
-            resolve(authors)
+        AuthorModel.findById(id).exec((err,author)=>{
+            resolve(author)
         })
+    })
+}
+function getAuthorList(key){
+    return new Promise((resolve,reject)=>{
+        if(key){
+            AuthorModel.find({name:{$regex:key}}).exec((err,authors)=>{
+                console.log(authors),
+                resolve(authors)
+            })
+        }else{
+            AuthorModel.find({}).exec((err,authors)=>{
+                console.log(authors),
+                resolve(authors)
+            })
+        }
+        
     })
 }
 module.exports = {
     addAuthor,
     getAuthors,
     deleteAuthor,
+    getAuthorList,
+    getAuthorById
 }
