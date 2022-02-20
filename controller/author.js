@@ -82,11 +82,19 @@ const getAuthorById = async(ctx)=>{
 }
 function getAuthor(id){
     return new Promise((resolve,reject)=>{
-        AuthorModel.findById(id).exec((err,author)=>{
+        AuthorModel.findById(id).populate('books','name cover intro').exec((err,author)=>{
+            // var opts = [{
+            //     path:'books',
+            //     select: 'name intro cover'
+            // }]
+            // author.populate(opts,function(err,populateDoc){
+            //     console.log(populateDoc.books[0].name)
+            // })
             resolve(author)
         })
     })
 }
+
 function getAuthorList(key){
     return new Promise((resolve,reject)=>{
         if(key){

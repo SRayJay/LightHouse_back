@@ -111,9 +111,12 @@ const deleteBook = async(ctx)=>{
         }
     }
 }
+const getBooksByAuthorId = async(ctx)=>{
+
+}
 function getBooks(param,key){
     /**
-     * @param:0:搜索books,1:热门书籍
+     * @param:0:搜索books,1:热门书籍,2:指定书籍id查询单本详情,3:得到所有书籍
      */
     return new Promise((resolve,reject)=>{
         if(param==0){
