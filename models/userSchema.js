@@ -26,7 +26,12 @@ const userSchema = new Schema({
   followers:{
     type: Array,
     default: []
-  }
+  },
+  reviews:[{type:Schema.Types.ObjectId,ref:'review'}],
+  excerpts:[{type:Schema.Types.ObjectId,}],
+  wantRead:[{type:Schema.Types.ObjectId,}],
+  haveRead:[{type:Schema.Types.ObjectId,}],
+  reading:[{type:Schema.Types.ObjectId,}],
 
 });
 

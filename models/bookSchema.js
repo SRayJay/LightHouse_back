@@ -14,7 +14,7 @@ const bookSchema = new Schema({
     have_read:[{type:Schema.Types.ObjectId}],
     reading:[{type:Schema.Types.ObjectId,}],
     want_read:[{type:Schema.Types.ObjectId,}],
-    reviews:[{type:Schema.Types.ObjectId,}],
+    reviews:[{type:Schema.Types.ObjectId,ref:'review'}],
     excerpts:[{type:Schema.Types.ObjectId,}],
     rate:{type:Number,default:0},
     comments:[{type:Schema.Types.ObjectId,}],
