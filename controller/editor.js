@@ -59,7 +59,27 @@ const publishReview = async(ctx)=>{
     }
 }
 
+const getReview = async(ctx)=>{
+    let id = ctx.query[0]
+    try {
+        let review = await ReviewModel.findById(id).exec()
+        ctx.body={
+            code:200,
+            msg:'获取成功',
+            data:review
+        }
+    } catch (error) {
+        console.log(error)
+        return ctx.body={
+            code:40001,
+            msg:'接口出错',
+            data:{}
+        }
+    }
+}
+
 module.exports ={
     checkReview,
     publishReview,
+    getReview
 }
