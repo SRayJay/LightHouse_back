@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { getCurrentTime } = require("../utils/util");
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -13,8 +14,9 @@ const userSchema = new Schema({
   province: { type: String, default: "" }, // 省
   city: { type: String, default: "" }, // 市
   gender: { type: Number, default: 2 }, // 1 男 0 女 2 保密
-  signUpTime: { type: Date, default: +new Date() }, // 注册时间
-  lastLoginTime: { type: Date, default: +new Date() }, // 最后一次登录
+  signUpTime: { type: String, default: getCurrentTime }, // 注册时间
+  // lastLoginTime: { type: Date, default: +new Date() }, // 最后一次登录
+  lastLoginTime:{type:String,default:getCurrentTime},
   // conversationsList: Array, // 会话列表 * name 会话名称 * photo 会话头像 * id 会话id * type   会话类型 group/ frend/me
   // emoji: Array, // 表情包
   age: { type: Number, default: 0 },

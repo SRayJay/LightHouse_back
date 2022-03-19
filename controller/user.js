@@ -4,6 +4,7 @@ const UserModel = require('../models/userSchema')
 
 // const fs = require("fs");
 const jwt = require('jsonwebtoken')
+const { getCurrentTime } = require('../utils/util')
 // const tools = require("../utils/tools");
 // const bcrypt = require("bcryptjs"); // 用于密码哈希的加密算法
 // const { log } = require("debug");
@@ -98,11 +99,15 @@ const login = async (ctx) => {
     const token = jwt.sign({ _id: userDoc._id }, 'LightHouse', {
       expiresIn: 60 * 60 * 24 * 7,
     })
+    userDoc.lastLoginTime = getCurrentTime();
+    await userDoc.save();
     ctx.body = {
       code: 200,
       msg: '登录成功',
-      token,
-      user: userDoc,
+      data:{
+        token,
+        user:userDoc
+      }
       // data: {
       //   userName: userDoc.userName,
       //   mobilePhone: userDoc.mobilePhone,

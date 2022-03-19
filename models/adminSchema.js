@@ -7,11 +7,11 @@ const adminSchema = new Schema({
     adminPwd:{type:String},
     createTime:{
         type:Date,
-        default:Date.now()
+        default:Date.now
     },
     lastLoginTime:{
         type:Date,
-        default:Date.now()
+        default:Date.now
     }
 })
 

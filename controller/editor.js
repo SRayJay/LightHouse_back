@@ -32,13 +32,13 @@ const checkReview = async(ctx)=>{
 }
 
 const publishReview = async(ctx)=>{
-    let {title,content,writer,rate,related_book} = ctx.request.body;
+    let {title,content,writer,text,related_book} = ctx.request.body;
     try {
         const review = new ReviewModel({
             title,
             content,
+            text,
             writer,
-            rate,
             related_book
         })
         await review.save()
@@ -62,7 +62,7 @@ const publishReview = async(ctx)=>{
 const getReview = async(ctx)=>{
     let id = ctx.query[0]
     try {
-        let review = await ReviewModel.findById(id).exec()
+        let review = await ReviewModel.findById(id).populate('writer','userName avatar signature').populate({path:'related_book',select:'name intro cover',populate:{path:'author',select:'name'}}).exec()
         ctx.body={
             code:200,
             msg:'获取成功',
