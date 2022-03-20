@@ -135,7 +135,7 @@ function getBooks(param,key){
             })
         }else if(param==2){
             // 根据id查询指定book
-            BookModel.findById(key).populate('author','name country intro').populate('reviews','title content').exec((err,book)=>{
+            BookModel.findById(key).populate('author','name country intro').populate('reviews','title content text').exec((err,book)=>{
                 resolve(book)
             })
         }else if(param==3){

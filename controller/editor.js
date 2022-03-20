@@ -1,7 +1,7 @@
 const ReviewModel = require('../models/reviewSchema')
 const UserModel = require('../models/userSchema')
 const BookModel = require('../models/bookSchema')
-
+const CommentModel = require('../models/commentSchema')
 
 const checkReview = async(ctx)=>{
     let {userid,bookid } = ctx.request.body;
@@ -62,7 +62,11 @@ const publishReview = async(ctx)=>{
 const getReview = async(ctx)=>{
     let id = ctx.query[0]
     try {
-        let review = await ReviewModel.findById(id).populate('writer','userName avatar signature').populate({path:'related_book',select:'name intro cover',populate:{path:'author',select:'name'}}).exec()
+        let review = await ReviewModel.findById(id)
+        .populate('writer','userName avatar signature')
+        .populate({path:'related_book',select:'name intro cover',populate:{path:'author',select:'name'}})
+        .populate({path:'comments',select:'content create_time',populate:{path:'creator',select:'userName avatar'}})
+        .exec()
         ctx.body={
             code:200,
             msg:'获取成功',
@@ -78,8 +82,39 @@ const getReview = async(ctx)=>{
     }
 }
 
+
+const publishComment = async(ctx)=>{
+    let {content,creator,depth,type,base_review,base_comment} = ctx.request.body;
+    try {
+        const comment = new CommentModel({
+            content,
+            creator,
+            depth,
+            type,
+            base_review,
+            base_comment
+        })
+        await comment.save()
+        if(base_review){
+            await ReviewModel.findByIdAndUpdate(base_review,{$push:{comments:comment._id}}).exec()
+        }
+        ctx.body={
+            code:200,
+            msg:'发布成功',
+            data:comment
+        }
+    } catch (error) {
+        console.log(error)
+        return ctx.body={
+            code:40001,
+            msg:'接口出错',
+            data:{}
+        }
+    }
+}
 module.exports ={
     checkReview,
     publishReview,
-    getReview
+    getReview,
+    publishComment
 }

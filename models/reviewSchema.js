@@ -8,6 +8,7 @@ const reviewSchema = new Schema({
     text:String,
     publish_time:{type:String,default:getCurrentTime},
     likes:[{type:Schema.Types.ObjectId,ref:'user'}],
+    comments:[{type:Schema.Types.ObjectId,ref:'comment'}],
     // 还有reply
     writer:{type:Schema.Types.ObjectId,ref:'user'},
     related_book:{type:Schema.Types.ObjectId,ref:'book'}
