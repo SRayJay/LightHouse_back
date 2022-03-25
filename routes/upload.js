@@ -85,4 +85,33 @@ async(ctx)=>{
     }
 })
 
+// 用户上传动态图片
+router.post('/moment',koaBody({
+    // encoding:'gzip',
+    multipart: true,
+    formidable:{
+        uploadDir:path.join(__dirname,'../public/uploads/moment'),
+        keepExtensions:true,
+    },
+}),
+async(ctx)=>{
+    try {
+        const avatar = ctx.request.files.file
+        const basename = path.basename(avatar.path)
+        ctx.body = {
+            code:200,
+            msg:'上传成功',
+            url:`${ctx.origin}/uploads/moment/${basename}`,
+            data:`/uploads/moment/${basename}`
+        }
+    } catch (error) {
+        console.log(error)
+        ctx.body={
+            code:400001,
+            msg:'上传失败',
+            data:error
+        }
+    }
+})
+
 module.exports = router

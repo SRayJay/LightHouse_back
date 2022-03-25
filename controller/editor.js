@@ -2,6 +2,8 @@ const ReviewModel = require('../models/reviewSchema')
 const UserModel = require('../models/userSchema')
 const BookModel = require('../models/bookSchema')
 const CommentModel = require('../models/commentSchema')
+const MomentModel = require('../models/momentSchema')
+const jwt = require('jsonwebtoken')
 
 const checkReview = async(ctx)=>{
     let {userid,bookid } = ctx.request.body;
@@ -59,6 +61,8 @@ const publishReview = async(ctx)=>{
     }
 }
 
+
+
 const getReview = async(ctx)=>{
     let id = ctx.query[0]
     try {
@@ -112,9 +116,37 @@ const publishComment = async(ctx)=>{
         }
     }
 }
+
+const publishMoment = async(ctx)=>{
+    let {content,pics,} = ctx.request.body;
+    let creator = jwt.verify(ctx.request.headers['token'],'LightHouse')
+    try {
+        const moment = new MomentModel({
+            content,
+            pics,
+            creator,
+        })
+        await moment.save()
+        await UserModel.findByIdAndUpdate(creator,{$push:{moments:moment._id}}).exec()
+        
+        ctx.body={
+            code:200,
+            msg:'发布成功',
+            data:moment
+        }
+    } catch (error) {
+        console.log(error)
+        return ctx.body={
+            code:40001,
+            msg:'接口出错',
+            data:{}
+        }
+    }
+}
 module.exports ={
     checkReview,
     publishReview,
     getReview,
-    publishComment
+    publishComment,
+    publishMoment
 }

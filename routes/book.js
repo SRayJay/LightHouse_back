@@ -9,6 +9,8 @@ router.get("/checkBookList",api.checkBookList)
 router.post("/addBook",api.addBook)
 router.post("/deleteBook",api.deleteBook)
 router.get("/getBook",api.getBook)
+
+router.post('/bookListAct',api.bookListAct)
 // router.post('/login', api.login)
 
 // router.post('/save', api.save)

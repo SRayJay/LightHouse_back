@@ -29,6 +29,7 @@ const userSchema = new Schema({
     type: Array,
     default: []
   },
+  moments:[{type:Schema.Types.ObjectId,ref:'moment'}],
   reviews:[{type:Schema.Types.ObjectId,ref:'review'}],
   excerpts:[{type:Schema.Types.ObjectId,}],
   wantRead:[{type:Schema.Types.ObjectId,}],
