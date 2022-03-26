@@ -129,8 +129,31 @@ const login = async (ctx) => {
   }
 }
 
-const save = async (ctx) => {
-  console.log(ctx.request.body)
+const saveInfo = async (ctx) => {
+  let {userName,city,signature,gender,avatar,background} = ctx.request.body;
+  let token = jwt.verify(ctx.request.headers['token'],'LightHouse')
+  try {
+    await UserModel.findByIdAndUpdate(token._id,{
+      userName:userName,
+      city,
+      signature,
+      gender,
+      avatar,background
+    }).exec()
+    let user = await UserModel.findById(token._id).exec()
+    ctx.body={
+      code:200,
+      msg:'修改成功',
+      data:user
+    }
+  } catch (error) {
+    console.log(error)
+    ctx.body={
+      code:40001,
+      msg:'接口出错',
+      data:error
+    }
+  }
 }
 
 const checkUserList = async(ctx)=>{
@@ -170,7 +193,7 @@ function getUserList(key){
 module.exports = {
   register,
   login,
-  save,
+  saveInfo,
   checkUserList,
   getUserList
   // sendSMSCode,

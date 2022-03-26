@@ -9,7 +9,7 @@ router.post('/register', api.register)
 // 用户登录
 router.post('/login', api.login)
 
-router.post('/save', api.save)
+router.post('/saveInfo', api.saveInfo)
 
 router.get('/checkUserList', api.checkUserList)
 module.exports = router

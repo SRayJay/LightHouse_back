@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
   // Schema
-  userId: {type:Number,unique:true},
   userName: { type: String, unique: true },
   password: {type:String},
   mobilePhone: { type: String, unique: true }, // 手机号码
