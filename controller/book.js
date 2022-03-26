@@ -172,11 +172,9 @@ function getBooks(param,key,token){
 const bookListAct= async(ctx)=>{
     let token = ctx.request.headers['token']
     let {_id:userid} = jwt.verify(token,'LightHouse')
-    // console.log(payload)
     let {bookid,type} = ctx.request.body;
     try {
         let userDoc = await UserModel.findById(userid)
-        console.log(userDoc)
         let bookDoc = await BookModel.findById(bookid)
         let upos1 = userDoc.wantRead.indexOf(bookid)
         let bpos1 = bookDoc.wantRead.indexOf(userid)
@@ -237,7 +235,7 @@ const bookListAct= async(ctx)=>{
             }
         }
         await userDoc.save()
-            await bookDoc.save()
+        await bookDoc.save()
         ctx.body={
             code:200,
             msg:'操作成功',
