@@ -10,6 +10,7 @@ router.post('/register', api.register)
 router.post('/login', api.login)
 
 router.post('/saveInfo', api.saveInfo)
-
+router.get('/getUserInfo',api.getUserInfo)
 router.get('/checkUserList', api.checkUserList)
+router.post('/addFollow',api.addFollow)
 module.exports = router

@@ -1,6 +1,7 @@
 const ProducerModel = require('../models/producerSchema')
 const PublisherModel = require('../models/publisherSchema')
 const SeriesModel = require('../models/seriesSchema')
+const jwt = require('jsonwebtoken')
 const {getAuthorList} = require('../controller/author')
 const {getUserList} = require('../controller/user')
 const {getBooks} = require('../controller/book')
@@ -10,7 +11,12 @@ const search = async(ctx)=>{
         let key = ctx.query[0]
         let books = await getBooks(0,key)
         let authors = await getAuthorList(key)
-        let users = await getUserList(key)
+        let users = []
+        if(ctx.request.headers['token']){
+            users = await getUserList(2,key,jwt.verify(ctx.request.headers['token'],'LightHouse')._id)
+        }else{
+            users = await getUserList(2,key)
+        }
         res.push(books)
         res.push(authors)
         res.push(users)

@@ -1,7 +1,8 @@
 const UserModel = require('../models/userSchema')
 // const MobilePhoneModel = require("../models/mobilePhone");
 // const mesModel = require("../models/message");
-
+const mongoose = require('mongoose')
+const ObjectId = mongoose.Types.ObjectId
 // const fs = require("fs");
 const jwt = require('jsonwebtoken')
 const { getCurrentTime } = require('../utils/util')
@@ -159,35 +160,126 @@ const saveInfo = async (ctx) => {
 const checkUserList = async(ctx)=>{
   const  key  = ctx.query[0]
   try {
-    let res = await getUserList(key)
-    ctx.body = {
-      code:200,
-      msg:'查询成功',
-      data:res
+    if(ctx.request.headers['token']){
+      let token = jwt.verify(ctx.request.headers['token'],'LightHouse')
+      let res = await getUserList(2,key,token._id)
+      ctx.body = {
+        code:200,
+        msg:'查询成功',
+        data:res
+      }
+    }else{
+      let res = await getUserList(2,key)
+      ctx.body = {
+        code:200,
+        msg:'查询成功',
+        data:res
+      }
     }
+    
+    
   } catch (error) {
     console.log(error)
   }
 }
+/**
+ * 根据id查找用户，返回信息
+ */
+const getUserInfo = async(ctx) =>{
+  let id = ctx.query[0]
+  try {
+    let res = await getUserList(3,id)
+    ctx.body={
+      code:200,
+      msg:'获取成功',
+      data:res
+    }
+  } catch (error) {
+    console.log(error)
+    ctx.body={
+      code:40001,
+      msg:'接口出错',
+      data:error
+    }
+  }
+}
 
-// 查询用户操作
-function getUserList(key){
+/**
+ * 
+ * @param {*} type 1:查询所有 2:根据关键字查名称 3:根据id查单个user 
+ * @param {*} key 
+ * @returns 
+ */
+function getUserList(type,key,token){
   return new Promise((resolve,reject)=>{
-    console.log('key:',key)
-    // const reg = new RegExp(key,'i')
-    if(key){
-      UserModel.find({userName:{$regex:key}}).exec((err,users)=>{
-        console.log(users)
-        resolve(users)
-      })
-    }else{
+    if(type===1){
       UserModel.find({}).exec((err,users)=>{
-        console.log(users)
+        // console.log(users)
         resolve(users)
       })
+    }else if(type===2){
+      UserModel.find({userName:{$regex:key}}).lean().exec((err,users)=>{
+        if(token){
+          users.forEach((user)=>{
+            console.log(1)
+            user.followers.some((i)=>ObjectId(i).toString()===token)?
+            user.isFollow=true:
+            user.isFollow=false
+          })
+          
+        }
+        resolve(users)
+      })
+    }else if(type===3){
+      UserModel.findById(key).lean().exec((err,user)=>{
+        if(token){
+          user.followers.some((i)=>ObjectId(i).toString()===token)?
+          user = {...user,isFollow:true}:
+          user = {...user,isFollow:false}
+        }
+        resolve(user)
+      })
+      
+      
     }
     
+    
   })
+}
+
+const addFollow = async(ctx)=>{
+  let token = jwt.verify(ctx.request.headers['token'],'LightHouse')
+  let {userid} = ctx.request.body
+  try {
+    let userDoc = await UserModel.findById(userid)
+    console.log(userDoc)
+    let index = userDoc.followers.findIndex((i)=>ObjectId(i).toString()===token._id)
+    if(index!==-1){
+      userDoc.followers.splice(index,1)
+      await userDoc.save()
+      
+      ctx.body={
+        code:200,
+        msg:'取消关注成功',
+        data:{user:userDoc,isFollow:false}
+      }
+    }else{
+      userDoc.followers.push(token._id)
+      await userDoc.save()
+      ctx.body={
+        code:200,
+        msg:'关注成功',
+        data:{user:userDoc,isFollow:true}
+      }
+    }
+  } catch (error) {
+    console.log(error)
+    ctx.body={
+      code:40001,
+      msg:'接口出错',
+      data:error
+    }
+  }
 }
 
 module.exports = {
@@ -195,7 +287,9 @@ module.exports = {
   login,
   saveInfo,
   checkUserList,
-  getUserList
+  getUserList,
+  getUserInfo,
+  addFollow
   // sendSMSCode,
   // updateUserInfo,
   // getUserInfo,
