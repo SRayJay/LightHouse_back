@@ -13,4 +13,6 @@ router.post('/saveInfo', api.saveInfo)
 router.get('/getUserInfo',api.getUserInfo)
 router.get('/checkUserList', api.checkUserList)
 router.post('/addFollow',api.addFollow)
+router.get('/getSpaceInfo',api.getSpaceInfo)
+router.get('/getHaveRead',api.getHaveRead)
 module.exports = router

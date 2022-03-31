@@ -204,6 +204,49 @@ const getUserInfo = async(ctx) =>{
   }
 }
 
+const getSpaceInfo = async(ctx) =>{
+  let id = ctx.query[0]
+  console.log(id)
+  try {
+    let res = await UserModel.findById(id)
+    .populate({path:'moments',select:'content pics',populate:{path:'creator',select:'userName signature avatar'}})
+    .populate('wantRead','cover name')
+    .populate('reading','cover name')
+    .populate('haveRead','cover name')
+    .populate({path:'reviews',select:'title text',populate:{path:'related_book',select:'cover name rate'}})
+    ctx.body={
+      code:200,
+      msg:'查询成功',
+      data:{moments:res.moments,wantRead:res.wantRead,reading:res.reading,haveRead:res.haveRead,reviews:res.reviews}
+    }
+  } catch (error) {
+    console.log(error)
+    ctx.body={
+      code:40001,
+      msg:'接口出错',
+      data:error
+    }
+  }
+}
+const getHaveRead = async(ctx)=>{
+  let id=ctx.query[0]
+  try {
+    let res = await UserModel.findById(id).populate({path:'haveRead',select:'name publisher',populate:{path:'author',select:'name'}})
+    ctx.body={
+      code:200,
+      msg:'查询成功',
+      data:res.haveRead
+    }
+  } catch (error) {
+    console.log(error)
+    ctx.body={
+      code:40001,
+      msg:'接口出错',
+      data:error
+    }
+  }
+}
+
 /**
  * 
  * @param {*} type 1:查询所有 2:根据关键字查名称 3:根据id查单个user 
@@ -289,7 +332,9 @@ module.exports = {
   checkUserList,
   getUserList,
   getUserInfo,
-  addFollow
+  addFollow,
+  getSpaceInfo,
+  getHaveRead
   // sendSMSCode,
   // updateUserInfo,
   // getUserInfo,

@@ -31,9 +31,9 @@ const userSchema = new Schema({
   moments:[{type:Schema.Types.ObjectId,ref:'moment'}],
   reviews:[{type:Schema.Types.ObjectId,ref:'review'}],
   excerpts:[{type:Schema.Types.ObjectId,}],
-  wantRead:[{type:Schema.Types.ObjectId,}],
-  haveRead:[{type:Schema.Types.ObjectId,}],
-  reading:[{type:Schema.Types.ObjectId,}],
+  wantRead:[{type:Schema.Types.ObjectId,ref:'book'}],
+  haveRead:[{type:Schema.Types.ObjectId,ref:'book'}],
+  reading:[{type:Schema.Types.ObjectId,ref:'book'}],
 
 });
 
