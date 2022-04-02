@@ -1,5 +1,5 @@
 const AdminModel = require('../models/adminSchema')
-
+const UserModel = require('../models/userSchema')
 const login = async (ctx) => {
     const { adminName, adminPwd } = ctx.request.body.admin
     
@@ -24,6 +24,36 @@ const login = async (ctx) => {
       console.log(error)
     }
   }
+
+const getUserList = async(ctx) =>{
+  let key = ctx.query[0] || null;
+  try {
+    if(key){
+      let res= await UserModel.find({userName:{$regex:key}})
+      ctx.body={
+        code:200,
+        msg:'查询成功',
+        data:res
+      }
+    }else{
+      let res = await UserModel.find({})
+      ctx.body={
+        code:200,
+        msg:'查询成功',
+        data:res
+      }
+    }
+    
+  } catch (error) {
+    console.log(error)
+    ctx.body={
+      code:40001,
+      msg:'接口错误',
+      data:error
+    }
+  }
+}
   module.exports = {
-      login
+      login,
+      getUserList
   }

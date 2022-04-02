@@ -169,6 +169,7 @@ const checkUserList = async(ctx)=>{
         data:res
       }
     }else{
+      console.log(1)
       let res = await getUserList(2,key)
       ctx.body = {
         code:200,
@@ -269,8 +270,8 @@ function getUserList(type,key,token){
             user.isFollow=true:
             user.isFollow=false
           })
-          
         }
+        console.log(users)
         resolve(users)
       })
     }else if(type===3){
@@ -281,12 +282,8 @@ function getUserList(type,key,token){
           user = {...user,isFollow:false}
         }
         resolve(user)
-      })
-      
-      
+      })  
     }
-    
-    
   })
 }
 

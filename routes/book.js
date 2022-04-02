@@ -11,9 +11,7 @@ router.post("/deleteBook",api.deleteBook)
 router.get("/getBook",api.getBook)
 
 router.post('/bookListAct',api.bookListAct)
-// router.post('/login', api.login)
+router.get('/getBooksByBelong',api.getBooksByBelong)
 
-// router.post('/save', api.save)
 
-// router.get('/checkUserList', api.checkUserList)
 module.exports = router

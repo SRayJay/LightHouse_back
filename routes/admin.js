@@ -15,6 +15,6 @@ const api = require('./../controller/admin')
 
 
 router.post('/login', api.login)
-
+router.get('/getUserList',api.getUserList)
 
 module.exports = router

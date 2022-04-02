@@ -71,7 +71,7 @@ const checkBookList = async(ctx)=>{
 }
 const addBook = async(ctx)=>{
     console.log(ctx.request.body)
-    let {name,intro,author,ISBN,series,cover,translator,publisher,producer,publishTime} = ctx.request.body;
+    let {name,intro,author,ISBN,series,cover,translator,belong,classify,publisher,producer,publishTime} = ctx.request.body;
     try {
         let bookDoc = await BookModel.findOne({name}).exec();
         if(bookDoc) return ctx.body={
@@ -90,7 +90,7 @@ const addBook = async(ctx)=>{
         const book = new BookModel({
             name,
             author:authorDoc._id,
-            intro,ISBN,cover,publisher,producer,publishTime,translator,series
+            intro,ISBN,cover,publisher,producer,publishTime,translator,series,belong,classify
         })
         await book.save()
         await AuthorModel.findOneAndUpdate({name:author},{$push:{books:book._id}}).exec()
@@ -133,9 +133,27 @@ const deleteBook = async(ctx)=>{
 const getBooksByAuthorId = async(ctx)=>{
 
 }
+const getBooksByBelong = async(ctx)=>{
+    let key= ctx.query[0];
+    try {
+        let books = await getBooks(4,key)
+        ctx.body={
+            code:200,
+            msg:'查询成功',
+            data:books
+        }
+    } catch (error) {
+        console.log(error)
+        ctx.body={
+            code:200,
+            msg:"接口出错",
+            data:error
+        }
+    }
+}
 function getBooks(param,key,token){
     /**
-     * @param:0:搜索books,1:热门书籍,2:指定书籍id查询单本详情,3:得到所有书籍
+     * @param:0:搜索books,1:热门书籍,2:指定书籍id查询单本详情,3:得到所有书籍 4:根据belong得到书籍列表
      */
     return new Promise((resolve,reject)=>{
         if(param==0){
@@ -159,6 +177,10 @@ function getBooks(param,key,token){
             })          
         }else if(param==3){
             BookModel.find({}).exec((err,books)=>{
+                resolve(books)
+            })
+        }else if(param==4){
+            BookModel.find({belong:key}).populate('author','name country intro').exec((err,books)=>{
                 resolve(books)
             })
         }
@@ -257,5 +279,6 @@ module.exports = {
     deleteBook,
     getBook,
     getBooks,
+    getBooksByBelong,
     bookListAct
 }

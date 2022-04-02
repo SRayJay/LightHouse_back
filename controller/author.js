@@ -2,7 +2,7 @@ const AuthorModel = require('../models/authorSchema');
 
 
 const addAuthor = async(ctx)=>{
-    const {name,intro,country,photo,nobel} = ctx.request.body
+    const {name,intro,country,photo,nobel,birth,death} = ctx.request.body
     try {
         const authorDoc = await AuthorModel.findOne({
             name
@@ -19,7 +19,9 @@ const addAuthor = async(ctx)=>{
             intro,
             country,
             photo,
-            nobel
+            nobel,
+            birth,
+            death
         })
         await author.save()
         ctx.body={

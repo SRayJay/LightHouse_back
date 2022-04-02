@@ -11,6 +11,8 @@ const bookSchema = new Schema({
     intro:String,
     translator:String,
     series:String,
+    belong:String, // 所属：拉美文学 中国古典文学 中国现当代文学 法国文学 英国文学 美国文学 俄国文学 德国文学 海外华语文学 日本文学 其他文学
+    classify:String, // 分类：散文 诗歌 小说 人文 社科 传记 随笔
     haveRead:[{type:Schema.Types.ObjectId}],
     reading:[{type:Schema.Types.ObjectId,}],
     wantRead:[{type:Schema.Types.ObjectId,}],
