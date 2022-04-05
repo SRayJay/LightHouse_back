@@ -58,12 +58,19 @@ app.use(koaBody({
 app.use(
   cors({
     origin: function (ctx) {
-      return ctx.header.origin;
+      return '*';
     }, // 允许发来请求的域名
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // 设置所允许的 HTTP请求方法
+    allowHeaders: ['Content-Type', 'Authorization', 'Accept','token'],
     credentials: true, // 标示该响应是合法的
   })
 );
+// app.use(async (ctx, next)=> {
+//   ctx.set('Access-Control-Allow-Origin', '*');
+//   ctx.set('Access-Control-Allow-Headers', '*');
+//   ctx.set('Access-Control-Allow-Methods', '*');
+//   await next();
+// });
 
 // middlewares
 // app.use(

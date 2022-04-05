@@ -57,18 +57,6 @@ const getBook = async(ctx) =>{
     }
 }
 
-const checkBookList = async(ctx)=>{
-    try{
-        let books = await getBooks(3)
-        ctx.body = {
-            code:200,
-            msg:'查询成功',
-            data:books
-        }
-    }catch(error){
-        console.log(error)
-    }
-}
 const addBook = async(ctx)=>{
     console.log(ctx.request.body)
     let {name,intro,author,ISBN,series,cover,translator,belong,classify,publisher,producer,publishTime} = ctx.request.body;
@@ -176,9 +164,7 @@ function getBooks(param,key,token){
                 resolve(book)
             })          
         }else if(param==3){
-            BookModel.find({}).exec((err,books)=>{
-                resolve(books)
-            })
+            
         }else if(param==4){
             BookModel.find({belong:key}).populate('author','name country intro').exec((err,books)=>{
                 resolve(books)
@@ -274,7 +260,6 @@ const bookListAct= async(ctx)=>{
 }
 module.exports = {
     hotBooks,
-    checkBookList,
     addBook,
     deleteBook,
     getBook,

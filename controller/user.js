@@ -58,8 +58,10 @@ const register = async (ctx) => {
     })
     ctx.body = {
       code: 200,
-      user: userEntity,
-      token: token,
+      data:{
+        user:userEntity,
+        token:token
+      },
       msg: '注册成功',
     }
   } catch (error) {

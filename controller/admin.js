@@ -27,6 +27,7 @@ const login = async (ctx) => {
 
 const getUserList = async(ctx) =>{
   let key = ctx.query[0] || null;
+  console.log(key)
   try {
     if(key){
       let res= await UserModel.find({userName:{$regex:key}})
@@ -53,7 +54,37 @@ const getUserList = async(ctx) =>{
     }
   }
 }
-  module.exports = {
-      login,
-      getUserList
+const getBookList = async(ctx)=>{
+  let key = ctx.query[0] || null;
+  console.log(key)
+  try {
+    if(key){
+      let res= await BookModel.find({name:{$regex:key}}).populate('author','name')
+      ctx.body={
+        code:200,
+        msg:'查询成功',
+        data:res
+      }
+    }else{
+      let res = await BookModel.find({}).populate('author','name')
+      ctx.body={
+        code:200,
+        msg:'查询成功',
+        data:res
+      }
+    }
+    
+  } catch (error) {
+    console.log(error)
+    ctx.body={
+      code:40001,
+      msg:'接口错误',
+      data:error
+    }
   }
+}
+module.exports = {
+    login,
+    getUserList,
+    getBookList
+}
