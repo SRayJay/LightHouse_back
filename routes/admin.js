@@ -17,5 +17,7 @@ const api = require('./../controller/admin')
 router.post('/login', api.login)
 router.get('/getUserList',api.getUserList)
 router.get('/getBookList',api.getBookList)
+router.post("/addBook",api.addBook)
+router.post("/deleteBook",api.deleteBook)
 
 module.exports = router

@@ -57,67 +57,8 @@ const getBook = async(ctx) =>{
     }
 }
 
-const addBook = async(ctx)=>{
-    console.log(ctx.request.body)
-    let {name,intro,author,ISBN,series,cover,translator,belong,classify,publisher,producer,publishTime} = ctx.request.body;
-    try {
-        let bookDoc = await BookModel.findOne({name}).exec();
-        if(bookDoc) return ctx.body={
-            code: 40001,
-            msg:'已存在该书名',
-            data:{}
-        }
-        let authorDoc = await AuthorModel.findOne({name:author}).exec();
-        console.log(authorDoc)
-        if(!authorDoc) return ctx.body={
-            code:40001,
-            msg:'不存在该作者',
-            data:{}
-        }
 
-        const book = new BookModel({
-            name,
-            author:authorDoc._id,
-            intro,ISBN,cover,publisher,producer,publishTime,translator,series,belong,classify
-        })
-        await book.save()
-        await AuthorModel.findOneAndUpdate({name:author},{$push:{books:book._id}}).exec()
-        if(series) await SeriesModel.findOneAndUpdate({name:series},{$push:{books:book._id}}).exec()
-        await PublisherModel.findOneAndUpdate({name:publisher},{$push:{books:book._id}}).exec()
-        if(producer) await ProducerModel.findOneAndUpdate({name:producer},{$push:{books:book._id}}).exec()
-        ctx.body={
-            code:200,
-            msg:'添加成功',
-            data:book
-        }
-    } catch (error) {
-        console.log(error)
-        ctx.body={
-            code:40001,
-            msg:'添加出错',
-            data:{}
-        }
-    }
-}
-const deleteBook = async(ctx)=>{
-    try {
-        let name = ctx.request.body.name;
-        console.log(name)
-        await BookModel.findOneAndRemove({name}).exec()
-        ctx.body={
-            code:200,
-            msg:'删除成功',
-            data:{}
-        }
-    } catch (error) {
-        console.log(error)
-        ctx.body={
-            code:40001,
-            msg:'删除出错',
-            data:{}
-        }
-    }
-}
+
 const getBooksByAuthorId = async(ctx)=>{
 
 }
@@ -260,8 +201,6 @@ const bookListAct= async(ctx)=>{
 }
 module.exports = {
     hotBooks,
-    addBook,
-    deleteBook,
     getBook,
     getBooks,
     getBooksByBelong,
